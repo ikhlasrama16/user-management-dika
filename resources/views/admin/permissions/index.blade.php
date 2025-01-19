@@ -27,7 +27,16 @@
                             <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium">
                                 <div class="flex justify-end">
                                     <a href="{{ route('admin.permissions.edit', $permission->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    <a href="#" class="ml-2 text-red-600 hover:text-red-900">Delete</a>
+                                    <!-- Tombol Delete -->
+                                    <button type="button"
+                                        onclick="confirmDelete({{ $permission->id }})"
+                                        class="ml-2 text-red-500 hover:text-red-600">
+                                        Delete
+                                    </button>
+                                    <form id="delete-form-{{ $permission->id }}" action="{{ route('admin.permissions.destroy', $permission->id) }}" method="POST" style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
                                 </div>
                             </td>
                         </tr>
