@@ -19,7 +19,7 @@
         <div class="flex-col w-full md:flex md:flex-row md:min-h-screen">
             <div @click.away="open = false" class="flex flex-col flex-shrink-0 w-full text-gray-700 bg-white md:w-64 dark:text-gray-200 dark:bg-gray-800" x-data="{ open: false }">
                 <div class="flex flex-row items-center justify-between flex-shrink-0 px-8 py-4">
-                    <a href="#" class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark:text-white focus:outline-none focus:shadow-outline">Flowtrail UI</a>
+                    <a href="{{ route('admin.users.index') }}" class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark:text-white focus:outline-none focus:shadow-outline">User Management</a>
                     <button class="rounded-lg md:hidden focus:outline-none focus:shadow-outline" @click="open = !open">
                         <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
                             <path x-show="!open" fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z" clip-rule="evenodd"></path>
@@ -30,6 +30,7 @@
                     <nav :class="{'block': open, 'hidden': !open}" class="flex-grow px-4 pb-4 md:block md:pb-0 md:overflow-y-auto">
                         <x-admin-link :active="'admin/roles'" :href="route('admin.roles.index')">Roles</x-admin-link>
                         <x-admin-link :active="'admin/permissions'" :href="route('admin.permissions.index')">Permissions</x-admin-link>
+                        <x-admin-link :active="'admin/users'" :href="route('admin.users.index')">Users</x-admin-link>
                         <div @click.away="open = false" class="relative" x-data="{ open: false }">
                             <button @click="open = !open" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg dark:bg-transparent dark:focus:text-white dark:hover:text-white dark:focus:bg-gray-600 dark:hover:bg-gray-600 md:block hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
                                 <span>{{ Auth::user()->name }}</span>
@@ -70,7 +71,18 @@
         </script>
 
         <script>
-            function confirmDelete(roleId) {
+            function confirmDelete(userId, isAdmin) {
+                if (isAdmin) {
+                    Swal.fire({
+                        title: 'Cannot Delete Admin!',
+                        text: "The 'admin' role cannot be deleted.",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                    return; // Hentikan proses jika role adalah admin
+                }
+
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -81,10 +93,12 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.getElementById(`delete-form-${roleId}`).submit();
+                        document.getElementById(`delete-form-${userId}`).submit();
                     }
                 });
             }
+
+
         </script>
 
     </body>
