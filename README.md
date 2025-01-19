@@ -3,7 +3,7 @@ run:
 2.  cd user-management-dika
 3.  composer install
 4.  cp .env.example .env
-5.  set your database
+5.  set your database in .env file
 6.  php artsian migrate:fresh --seed
 7.  php artisan key:generate
 8.  php artisan serve
