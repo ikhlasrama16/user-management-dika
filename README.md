@@ -10,3 +10,5 @@ run:
 
 email: admin@admin.com
 pasword: password
+
+use register create new user 
